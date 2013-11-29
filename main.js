@@ -24,22 +24,23 @@ module.exports = function (config) {
 				reject({
 					"code": "EPARSE",
 					"toString": function () {
-						return "Unable to parse package/version";
+						return "Unable to parse package/version/path";
 					}
 				});
 			}
 			else {
 				bower.commands
-					.info(matches.package + "#" + encodeURIComponent(matches.version), null, config)
+					.info(matches.package + "#" + (bower.config.offline ? decodeURI : decodeURIComponent)(matches.version), null, config)
 					.on("error", reject)
 					.on("log", notify)
 					.on("end", function (info) {
-						var version = info.version || info.latest && info.latest.version || matches.version;
+						var decoded_version = decodeURIComponent(matches.version);
+						var resolve_version = info.version || info.latest && info.latest.version || decoded_version;
 
-						if (version !== matches.version) {
+						if (resolve_version !== decoded_version) {
 							response.statusCode = 302;
-							response.setHeader("Location", xregexp.replace(pathname, re, "/${package}/" + version + "/${path}"));
-							response.end("Redirecting to resolved version " + version);
+							response.setHeader("Location", xregexp.replace(pathname, re, "/${package}/" + encodeURIComponent(resolve_version) + "/${path}"));
+							response.end("Redirecting to " + response.getHeader("Location"));
 						}
 						else {
 							bower.commands
@@ -48,7 +49,7 @@ module.exports = function (config) {
 								.on("log", notify)
 								.on("end", function (entries) {
 									var entry = _.find(entries, function (entry) {
-										return (entry.pkgMeta._resolution.type === "version" ? entry.pkgMeta._resolution.tag : entry.pkgMeta._resolution.branch) === version;
+										return (entry.pkgMeta._resolution.type === "version" ? entry.pkgMeta._resolution.tag : entry.pkgMeta._resolution.branch) === decoded_version;
 									});
 
 									if (entry) {
@@ -58,7 +59,7 @@ module.exports = function (config) {
 										reject({
 											"code": "ENOCACHE",
 											"toString": function () {
-												return "Unable to find cache entry for version " + version;
+												return "Unable to find cache entry for version " + decoded_version;
 											}
 										});
 									}
