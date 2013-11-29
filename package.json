@@ -1,0 +1,29 @@
+{
+  "name": "middleware-bower",
+  "version": "0.0.1",
+  "description": "Bower middleware",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikaelkaron/middleware-bower.git"
+  },
+  "author": {
+    "name": "Mikael Karon",
+    "email": "mikael@karon.se"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikaelkaron/middleware-bower/issues"
+  },
+  "homepage": "https://github.com/mikaelkaron/middleware-bower",
+  "dependencies": {
+    "send": "~0.1",
+    "bower": "~1.2",
+    "xregexp": "~2.0",
+    "q": "~0.9",
+    "lodash": "~2.4"
+  }
+}
