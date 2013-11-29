@@ -1,5 +1,5 @@
 {
-  "name": "middleware-bower",
+  "name": "connect-bower",
   "version": "0.0.1",
   "description": "Bower middleware",
   "main": "main.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mikaelkaron/middleware-bower.git"
+    "url": "https://github.com/mikaelkaron/connect-bower.git"
   },
   "author": {
     "name": "Mikael Karon",
@@ -16,9 +16,8 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mikaelkaron/middleware-bower/issues"
+    "url": "https://github.com/mikaelkaron/connect-bower/issues"
   },
-  "homepage": "https://github.com/mikaelkaron/middleware-bower",
   "dependencies": {
     "send": "~0.1",
     "bower": "~1.2",
