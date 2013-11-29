@@ -20,9 +20,6 @@ module.exports = function (config) {
 		var matches = xregexp.exec(pathname, re);
 
 		q.promise(function (resolve, reject, notify) {
-			var match_package = decodeURIComponent(matches.package);
-			var match_version = decodeURIComponent(matches.version);
-
 			if (matches === null) {
 				reject({
 					"code": "EPARSE",
@@ -33,20 +30,20 @@ module.exports = function (config) {
 			}
 			else {
 				bower.commands
-					.info(match_package + "#" + match_version, null, config)
+					.info(matches.package + "#" + encodeURIComponent(matches.version), null, config)
 					.on("error", reject)
 					.on("log", notify)
 					.on("end", function (info) {
-						var version = info.version || info.latest && info.latest.version || match_version;
+						var version = info.version || info.latest && info.latest.version || matches.version;
 
-						if (version !== match_version) {
+						if (version !== matches.version) {
 							response.statusCode = 302;
 							response.setHeader("Location", xregexp.replace(pathname, re, "/${package}/" + version + "/${path}"));
 							response.end("Redirecting to resolved version " + version);
 						}
 						else {
 							bower.commands
-								.cache.list([ match_package ], null, config)
+								.cache.list([ matches.package ], null, config)
 								.on("error", reject)
 								.on("log", notify)
 								.on("end", function (entries) {
