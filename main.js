@@ -7,6 +7,9 @@ module.exports = function (config) {
 	var url = require("url");
 	var send = require("send");
 	var bower = require("bower");
+	var map = {
+		"version": "tag"
+	};
 
 	config = _.defaults(config || {}, {
 		"pattern": "/(?<package>[^/]+)/(?<version>[^/]+)/(?<path>.+)",
@@ -49,7 +52,10 @@ module.exports = function (config) {
 								.on("log", notify)
 								.on("end", function (entries) {
 									var entry = _.find(entries, function (entry) {
-										return (entry.pkgMeta._resolution.type === "version" ? entry.pkgMeta._resolution.tag : entry.pkgMeta._resolution.branch) === decoded_version;
+										var _resolution = entry.pkgMeta._resolution;
+										var type = _resolution.type;
+
+										return _resolution[map[type] || type] === decoded_version;
 									});
 
 									if (entry) {
