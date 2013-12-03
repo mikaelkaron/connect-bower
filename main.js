@@ -7,13 +7,20 @@ module.exports = function (config) {
 	var url = require("url");
 	var send = require("send");
 	var bower = require("bower");
+
 	var map = {
-		"version": "tag"
+		"version": "tag",
+		"commit": "commit",
+		"branch": "branch"
 	};
 
 	config = _.defaults(config || {}, {
 		"pattern": "/(?<package>[^/]+)/(?<version>[^/]+)/(?<path>.+)",
-		"maxage": 1000 * 60 * 60 * 24
+		"maxage": {
+			"version": 1000 * 60 * 60 * 24,
+			"commit": 1000 * 60 * 60 * 24,
+			"branch": 0
+		}
 	});
 
 	var re = xregexp(config.pattern);
@@ -77,7 +84,7 @@ module.exports = function (config) {
 			.done(function (entry) {
 				send(request, matches.path)
 					.root(entry.canonicalDir)
-					.maxage(entry.pkgMeta._resolution.type === "version" ? config.maxage : 0)
+					.maxage(config.maxage[entry.pkgMeta._resolution.type] || 0)
 					.pipe(response);
 			}, function (error) {
 				switch (error.code) {
