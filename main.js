@@ -8,25 +8,24 @@ module.exports = function (config) {
 	var send = require("send");
 	var bower = require("bower");
 
+	var re = xregexp("/(?<package>[^/]+)/(?<version>[^/]+)/(?<path>.+)");
 	var map = {
 		"version": "tag",
 		"commit": "commit",
 		"branch": "branch"
 	};
+	var maxage = 1000 * 60 * 60 * 24;
 
 	config = _.defaults(config || {}, {
-		"pattern": "/(?<package>[^/]+)/(?<version>[^/]+)/(?<path>.+)",
 		"maxage": {
-			"version": 1000 * 60 * 60 * 24,
-			"commit": 1000 * 60 * 60 * 24,
+			"version": maxage,
+			"commit": maxage,
 			"branch": 0
 		}
 	});
 
-	var re = xregexp(config.pattern);
-
 	return function (request, response, next) {
-		var pathname = url.parse(request.url, true).pathname;
+		var pathname = url.parse(request.url).pathname;
 		var matches = xregexp.exec(pathname, re);
 
 		q.promise(function (resolve, reject, notify) {
