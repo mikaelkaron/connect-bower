@@ -1,6 +1,6 @@
 {
   "name": "connect-bower",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bower middleware",
   "main": "main.js",
   "scripts": {

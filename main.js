@@ -58,10 +58,11 @@ module.exports = function (config) {
 								.on("log", notify)
 								.on("end", function (entries) {
 									var entry = _.find(entries, function (entry) {
-										var _resolution = entry.pkgMeta._resolution;
+										var pkgMeta = entry.pkgMeta;
+										var _resolution = pkgMeta._resolution;
 										var type = _resolution.type;
 
-										return _resolution[map[type] || type] === decoded_version;
+										return (pkgMeta.version || _resolution[map[type] || type]) === decoded_version;
 									});
 
 									if (entry) {
